@@ -53,8 +53,8 @@ This repository contains the full source code, notebooks for data exploration, a
 **Installation:**
 
 1.  \*\*Clone the repository:\*\*bash
-    git clone [https://github.com/justAbhinav/NANDI-System](https://github.com/justAbhinav/NANDI-System)
-    cd NANDI-System
+    git clone [https://github.com/justAbhinav/Nandi-System](https://github.com/justAbhinav/Nandi-System)
+    cd Nandi-System
 
     ```
 
