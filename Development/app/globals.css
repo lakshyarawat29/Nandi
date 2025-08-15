@@ -1,0 +1,201 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Smooth page transitions */
+  .page-enter {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+
+  .page-enter-active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    transition: opacity 500ms ease-out, transform 500ms ease-out;
+  }
+
+  .page-exit {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .page-exit-active {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.98);
+    transition: opacity 300ms ease-in, transform 300ms ease-in;
+  }
+
+  /* Loading animations */
+  .skeleton-pulse {
+    animation: skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .fade-in-up {
+    animation: fade-in-up 0.6s ease-out forwards;
+  }
+
+  .fade-in-down {
+    animation: fade-in-down 0.6s ease-out forwards;
+  }
+
+  .slide-in-left {
+    animation: slide-in-left 0.5s ease-out forwards;
+  }
+
+  .slide-in-right {
+    animation: slide-in-right 0.5s ease-out forwards;
+  }
+}
+
+@layer base {
+  :root {
+    /* Updated color tokens for agricultural fintech theme */
+    --background: 0 0% 100%;
+    --foreground: 220 13% 26%;
+    --card: 120 60% 97%;
+    --card-foreground: 220 13% 26%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 13% 26%;
+    --primary: 142 76% 36%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 84 81% 44%;
+    --secondary-foreground: 220 13% 26%;
+    --muted: 120 60% 97%;
+    --muted-foreground: 220 9% 46%;
+    --accent: 84 81% 44%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 20 91% 48%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 13% 83%;
+    --input: 210 40% 98%;
+    --ring: 174 72% 56%;
+    --chart-1: 142 69% 58%;
+    --chart-2: 45 93% 47%;
+    --chart-3: 38 92% 50%;
+    --chart-4: 348 83% 47%;
+    --chart-5: 221 83% 53%;
+    --radius: 0.5rem;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 13% 26%;
+    --sidebar-primary: 142 76% 36%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 84 81% 44%;
+    --sidebar-accent-foreground: 220 13% 26%;
+    --sidebar-border: 220 13% 83%;
+    --sidebar-ring: 174 72% 56%;
+  }
+  .dark {
+    --background: 220 13% 9%;
+    --foreground: 0 0% 95%;
+    --card: 220 13% 9%;
+    --card-foreground: 0 0% 95%;
+    --popover: 220 13% 9%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 142 76% 36%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 13% 18%;
+    --secondary-foreground: 0 0% 95%;
+    --muted: 220 13% 18%;
+    --muted-foreground: 220 9% 64%;
+    --accent: 84 81% 44%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 13% 18%;
+    --input: 220 13% 18%;
+    --ring: 174 72% 56%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --sidebar-background: 220 13% 9%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 142 76% 36%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 84 81% 44%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 220 13% 18%;
+    --sidebar-ring: 174 72% 56%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom keyframe animations */
+@keyframes skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced focus states for better accessibility */
+*:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
