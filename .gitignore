@@ -106,4 +106,4 @@ $RECYCLE.BIN/
 *.tmp
 agriscraper/
 RAG Model/data
-# RAG Model/vectorstore
+RAG Model/vectorstore
