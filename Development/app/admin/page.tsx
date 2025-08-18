@@ -1,6 +1,6 @@
-"use client"
+'use client';
 
-import { useState } from "react"
+import { useState } from 'react';
 import {
   ArrowLeft,
   MessageSquare,
@@ -13,14 +13,27 @@ import {
   Trash2,
   CheckCircle,
   AlertTriangle,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import {
   LineChart,
   Line,
@@ -34,192 +47,195 @@ import {
   PieChart,
   Pie,
   Cell,
-} from "recharts"
-import Link from "next/link"
+} from 'recharts';
+import Link from 'next/link';
 
 interface Farmer {
-  id: string
-  name: string
-  phone: string
-  location: string
-  registrationDate: string
-  trustScore: number
-  status: "active" | "inactive" | "suspended"
-  lastActivity: string
+  id: string;
+  name: string;
+  phone: string;
+  location: string;
+  registrationDate: string;
+  trustScore: number;
+  status: 'active' | 'inactive' | 'suspended';
+  lastActivity: string;
 }
 
 interface ChatSession {
-  id: string
-  farmerId: string
-  farmerName: string
-  type: "sms" | "voice"
-  duration: string
-  messages: number
-  timestamp: string
-  status: "completed" | "ongoing" | "failed"
+  id: string;
+  farmerId: string;
+  farmerName: string;
+  type: 'sms' | 'voice';
+  duration: string;
+  messages: number;
+  timestamp: string;
+  status: 'completed' | 'ongoing' | 'failed';
 }
 
 interface SystemMetric {
-  name: string
-  value: string
-  change: number
-  trend: "up" | "down" | "stable"
+  name: string;
+  value: string;
+  change: number;
+  trend: 'up' | 'down' | 'stable';
 }
 
 export default function AdminControlPanel() {
-  const [selectedTimeframe, setSelectedTimeframe] = useState("7days")
-  const [searchTerm, setSearchTerm] = useState("")
-  const [statusFilter, setStatusFilter] = useState("all")
+  const [selectedTimeframe, setSelectedTimeframe] = useState('7days');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
 
   // Mock data for farmers
   const farmers: Farmer[] = [
     {
-      id: "F001",
-      name: "राम कुमार",
-      phone: "+91 98765 43210",
-      location: "Ludhiana, Punjab",
-      registrationDate: "2024-01-15",
+      id: 'F001',
+      name: 'राम कुमार',
+      phone: '+91 98765 43210',
+      location: 'Ludhiana, Punjab',
+      registrationDate: '2024-01-15',
       trustScore: 750,
-      status: "active",
-      lastActivity: "2 hours ago",
+      status: 'active',
+      lastActivity: '2 hours ago',
     },
     {
-      id: "F002",
-      name: "Priya Devi",
-      phone: "+91 87654 32109",
-      location: "Amritsar, Punjab",
-      registrationDate: "2024-01-20",
+      id: 'F002',
+      name: 'Priya Devi',
+      phone: '+91 87654 32109',
+      location: 'Amritsar, Punjab',
+      registrationDate: '2024-01-20',
       trustScore: 680,
-      status: "active",
-      lastActivity: "1 day ago",
+      status: 'active',
+      lastActivity: '1 day ago',
     },
     {
-      id: "F003",
-      name: "Suresh Patel",
-      phone: "+91 76543 21098",
-      location: "Ahmedabad, Gujarat",
-      registrationDate: "2024-02-01",
+      id: 'F003',
+      name: 'Suresh Patel',
+      phone: '+91 76543 21098',
+      location: 'Ahmedabad, Gujarat',
+      registrationDate: '2024-02-01',
       trustScore: 820,
-      status: "inactive",
-      lastActivity: "5 days ago",
+      status: 'inactive',
+      lastActivity: '5 days ago',
     },
     {
-      id: "F004",
-      name: "Lakshmi Reddy",
-      phone: "+91 65432 10987",
-      location: "Hyderabad, Telangana",
-      registrationDate: "2024-02-10",
+      id: 'F004',
+      name: 'Lakshmi Reddy',
+      phone: '+91 65432 10987',
+      location: 'Hyderabad, Telangana',
+      registrationDate: '2024-02-10',
       trustScore: 590,
-      status: "suspended",
-      lastActivity: "1 week ago",
+      status: 'suspended',
+      lastActivity: '1 week ago',
     },
-  ]
+  ];
 
   // Mock data for chat sessions
   const chatSessions: ChatSession[] = [
     {
-      id: "C001",
-      farmerId: "F001",
-      farmerName: "राम कुमार",
-      type: "sms",
-      duration: "5 min",
+      id: 'C001',
+      farmerId: 'F001',
+      farmerName: 'राम कुमार',
+      type: 'sms',
+      duration: '5 min',
       messages: 8,
-      timestamp: "2024-06-15 14:30",
-      status: "completed",
+      timestamp: '2024-06-15 14:30',
+      status: 'completed',
     },
     {
-      id: "C002",
-      farmerId: "F002",
-      farmerName: "Priya Devi",
-      type: "voice",
-      duration: "12 min",
+      id: 'C002',
+      farmerId: 'F002',
+      farmerName: 'Priya Devi',
+      type: 'voice',
+      duration: '12 min',
       messages: 0,
-      timestamp: "2024-06-15 13:45",
-      status: "completed",
+      timestamp: '2024-06-15 13:45',
+      status: 'completed',
     },
     {
-      id: "C003",
-      farmerId: "F003",
-      farmerName: "Suresh Patel",
-      type: "sms",
-      duration: "3 min",
+      id: 'C003',
+      farmerId: 'F003',
+      farmerName: 'Suresh Patel',
+      type: 'sms',
+      duration: '3 min',
       messages: 5,
-      timestamp: "2024-06-15 12:20",
-      status: "ongoing",
+      timestamp: '2024-06-15 12:20',
+      status: 'ongoing',
     },
-  ]
+  ];
 
   // System metrics
   const systemMetrics: SystemMetric[] = [
-    { name: "Total Farmers", value: "10,247", change: 12.5, trend: "up" },
-    { name: "Active Users", value: "8,932", change: 8.3, trend: "up" },
-    { name: "Chat Sessions", value: "1,456", change: -2.1, trend: "down" },
-    { name: "Trust Score Avg", value: "742", change: 5.2, trend: "up" },
-  ]
+    { name: 'Total Farmers', value: '10,247', change: 12.5, trend: 'up' },
+    { name: 'Active Users', value: '8,932', change: 8.3, trend: 'up' },
+    { name: 'Chat Sessions', value: '1,456', change: -2.1, trend: 'down' },
+    { name: 'Trust Score Avg', value: '742', change: 5.2, trend: 'up' },
+  ];
 
   // Analytics data
   const userGrowthData = [
-    { month: "Jan", users: 5200, sessions: 890 },
-    { month: "Feb", users: 6100, sessions: 1120 },
-    { month: "Mar", users: 7300, sessions: 1340 },
-    { month: "Apr", users: 8200, sessions: 1280 },
-    { month: "May", users: 9100, sessions: 1420 },
-    { month: "Jun", users: 10247, sessions: 1456 },
-  ]
+    { month: 'Jan', users: 5200, sessions: 890 },
+    { month: 'Feb', users: 6100, sessions: 1120 },
+    { month: 'Mar', users: 7300, sessions: 1340 },
+    { month: 'Apr', users: 8200, sessions: 1280 },
+    { month: 'May', users: 9100, sessions: 1420 },
+    { month: 'Jun', users: 10247, sessions: 1456 },
+  ];
 
   const trustScoreDistribution = [
-    { range: "300-499", count: 1024, color: "#ef4444" },
-    { range: "500-649", count: 2156, color: "#f59e0b" },
-    { range: "650-749", count: 3892, color: "#3b82f6" },
-    { range: "750-849", count: 2654, color: "#10b981" },
-    { range: "850-1000", count: 521, color: "#8b5cf6" },
-  ]
+    { range: '300-499', count: 1024, color: '#ef4444' },
+    { range: '500-649', count: 2156, color: '#f59e0b' },
+    { range: '650-749', count: 3892, color: '#3b82f6' },
+    { range: '750-849', count: 2654, color: '#10b981' },
+    { range: '850-1000', count: 521, color: '#8b5cf6' },
+  ];
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "active":
-        return <Badge className="bg-green-100 text-green-800">Active</Badge>
-      case "inactive":
-        return <Badge className="bg-yellow-100 text-yellow-800">Inactive</Badge>
-      case "suspended":
-        return <Badge className="bg-red-100 text-red-800">Suspended</Badge>
+      case 'active':
+        return <Badge className="bg-green-100 text-green-800">Active</Badge>;
+      case 'inactive':
+        return (
+          <Badge className="bg-yellow-100 text-yellow-800">Inactive</Badge>
+        );
+      case 'suspended':
+        return <Badge className="bg-red-100 text-red-800">Suspended</Badge>;
       default:
-        return <Badge variant="outline">{status}</Badge>
+        return <Badge variant="outline">{status}</Badge>;
     }
-  }
+  };
 
   const getChatStatusBadge = (status: string) => {
     switch (status) {
-      case "completed":
-        return <Badge className="bg-green-100 text-green-800">Completed</Badge>
-      case "ongoing":
-        return <Badge className="bg-blue-100 text-blue-800">Ongoing</Badge>
-      case "failed":
-        return <Badge className="bg-red-100 text-red-800">Failed</Badge>
+      case 'completed':
+        return <Badge className="bg-green-100 text-green-800">Completed</Badge>;
+      case 'ongoing':
+        return <Badge className="bg-blue-100 text-blue-800">Ongoing</Badge>;
+      case 'failed':
+        return <Badge className="bg-red-100 text-red-800">Failed</Badge>;
       default:
-        return <Badge variant="outline">{status}</Badge>
+        return <Badge variant="outline">{status}</Badge>;
     }
-  }
+  };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up":
-        return <TrendingUp className="w-4 h-4 text-green-500" />
-      case "down":
-        return <TrendingUp className="w-4 h-4 text-red-500 rotate-180" />
+      case 'up':
+        return <TrendingUp className="w-4 h-4 text-green-500" />;
+      case 'down':
+        return <TrendingUp className="w-4 h-4 text-red-500 rotate-180" />;
       default:
-        return <div className="w-4 h-4 bg-gray-400 rounded-full" />
+        return <div className="w-4 h-4 bg-gray-400 rounded-full" />;
     }
-  }
+  };
 
   const filteredFarmers = farmers.filter((farmer) => {
     const matchesSearch =
       farmer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       farmer.phone.includes(searchTerm) ||
-      farmer.location.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesStatus = statusFilter === "all" || farmer.status === statusFilter
-    return matchesSearch && matchesStatus
-  })
+      farmer.location.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus =
+      statusFilter === 'all' || farmer.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
 
   return (
     <div className="min-h-screen bg-background">
@@ -227,7 +243,10 @@ export default function AdminControlPanel() {
       <header className="sticky top-0 z-50 bg-background/95 backdrop-blur border-b border-border">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center space-x-2 text-muted-foreground hover:text-primary">
+            <Link
+              href="/"
+              className="flex items-center space-x-2 text-muted-foreground hover:text-primary"
+            >
               <ArrowLeft className="w-5 h-5" />
               <span>Back to Home</span>
             </Link>
@@ -246,8 +265,12 @@ export default function AdminControlPanel() {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Admin Control Panel</h1>
-          <p className="text-muted-foreground">Monitor and manage the Krishi-Mudra platform</p>
+          <h1 className="text-3xl font-bold text-foreground mb-2">
+            Admin Control Panel
+          </h1>
+          <p className="text-muted-foreground">
+            Monitor and manage the Nandi platform
+          </p>
         </div>
 
         {/* System Metrics */}
@@ -257,21 +280,23 @@ export default function AdminControlPanel() {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground">{metric.name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {metric.name}
+                    </p>
                     <p className="text-2xl font-bold">{metric.value}</p>
                   </div>
                   <div className="flex items-center space-x-1">
                     {getTrendIcon(metric.trend)}
                     <span
                       className={`text-sm ${
-                        metric.trend === "up"
-                          ? "text-green-600"
-                          : metric.trend === "down"
-                            ? "text-red-600"
-                            : "text-gray-600"
+                        metric.trend === 'up'
+                          ? 'text-green-600'
+                          : metric.trend === 'down'
+                          ? 'text-red-600'
+                          : 'text-gray-600'
                       }`}
                     >
-                      {metric.change > 0 ? "+" : ""}
+                      {metric.change > 0 ? '+' : ''}
                       {metric.change}%
                     </span>
                   </div>
@@ -304,8 +329,20 @@ export default function AdminControlPanel() {
                       <XAxis dataKey="month" />
                       <YAxis />
                       <Tooltip />
-                      <Line type="monotone" dataKey="users" stroke="#15803d" strokeWidth={2} name="Total Users" />
-                      <Line type="monotone" dataKey="sessions" stroke="#3b82f6" strokeWidth={2} name="Chat Sessions" />
+                      <Line
+                        type="monotone"
+                        dataKey="users"
+                        stroke="#15803d"
+                        strokeWidth={2}
+                        name="Total Users"
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="sessions"
+                        stroke="#3b82f6"
+                        strokeWidth={2}
+                        name="Chat Sessions"
+                      />
                     </LineChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -348,25 +385,37 @@ export default function AdminControlPanel() {
                     <CheckCircle className="w-5 h-5 text-green-600" />
                     <div>
                       <p className="font-medium">New farmer registration</p>
-                      <p className="text-sm text-muted-foreground">Rajesh Kumar from Haryana joined the platform</p>
+                      <p className="text-sm text-muted-foreground">
+                        Rajesh Kumar from Haryana joined the platform
+                      </p>
                     </div>
-                    <span className="text-xs text-muted-foreground ml-auto">2 min ago</span>
+                    <span className="text-xs text-muted-foreground ml-auto">
+                      2 min ago
+                    </span>
                   </div>
                   <div className="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg">
                     <MessageSquare className="w-5 h-5 text-blue-600" />
                     <div>
                       <p className="font-medium">High chat volume detected</p>
-                      <p className="text-sm text-muted-foreground">156 active chat sessions in the last hour</p>
+                      <p className="text-sm text-muted-foreground">
+                        156 active chat sessions in the last hour
+                      </p>
                     </div>
-                    <span className="text-xs text-muted-foreground ml-auto">15 min ago</span>
+                    <span className="text-xs text-muted-foreground ml-auto">
+                      15 min ago
+                    </span>
                   </div>
                   <div className="flex items-center space-x-3 p-3 bg-yellow-50 rounded-lg">
                     <AlertTriangle className="w-5 h-5 text-yellow-600" />
                     <div>
                       <p className="font-medium">Weather API response slow</p>
-                      <p className="text-sm text-muted-foreground">Average response time: 3.2s (normal: 1.1s)</p>
+                      <p className="text-sm text-muted-foreground">
+                        Average response time: 3.2s (normal: 1.1s)
+                      </p>
                     </div>
-                    <span className="text-xs text-muted-foreground ml-auto">1 hour ago</span>
+                    <span className="text-xs text-muted-foreground ml-auto">
+                      1 hour ago
+                    </span>
                   </div>
                 </div>
               </CardContent>
@@ -384,7 +433,10 @@ export default function AdminControlPanel() {
                       <Download className="w-4 h-4 mr-2" />
                       Export
                     </Button>
-                    <Button size="sm" className="bg-primary hover:bg-primary/90">
+                    <Button
+                      size="sm"
+                      className="bg-primary hover:bg-primary/90"
+                    >
                       Add Farmer
                     </Button>
                   </div>
@@ -430,7 +482,9 @@ export default function AdminControlPanel() {
                   <TableBody>
                     {filteredFarmers.map((farmer) => (
                       <TableRow key={farmer.id}>
-                        <TableCell className="font-medium">{farmer.id}</TableCell>
+                        <TableCell className="font-medium">
+                          {farmer.id}
+                        </TableCell>
                         <TableCell>{farmer.name}</TableCell>
                         <TableCell>{farmer.phone}</TableCell>
                         <TableCell>{farmer.location}</TableCell>
@@ -438,10 +492,10 @@ export default function AdminControlPanel() {
                           <span
                             className={`font-semibold ${
                               farmer.trustScore >= 750
-                                ? "text-green-600"
+                                ? 'text-green-600'
                                 : farmer.trustScore >= 650
-                                  ? "text-blue-600"
-                                  : "text-yellow-600"
+                                ? 'text-blue-600'
+                                : 'text-yellow-600'
                             }`}
                           >
                             {farmer.trustScore}
@@ -457,7 +511,11 @@ export default function AdminControlPanel() {
                             <Button variant="ghost" size="sm">
                               <Edit className="w-4 h-4" />
                             </Button>
-                            <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="text-red-600 hover:text-red-700"
+                            >
                               <Trash2 className="w-4 h-4" />
                             </Button>
                           </div>
@@ -493,20 +551,28 @@ export default function AdminControlPanel() {
                   <TableBody>
                     {chatSessions.map((session) => (
                       <TableRow key={session.id}>
-                        <TableCell className="font-medium">{session.id}</TableCell>
+                        <TableCell className="font-medium">
+                          {session.id}
+                        </TableCell>
                         <TableCell>{session.farmerName}</TableCell>
                         <TableCell>
                           <Badge
                             variant="outline"
-                            className={session.type === "sms" ? "text-blue-600" : "text-green-600"}
+                            className={
+                              session.type === 'sms'
+                                ? 'text-blue-600'
+                                : 'text-green-600'
+                            }
                           >
                             {session.type.toUpperCase()}
                           </Badge>
                         </TableCell>
                         <TableCell>{session.duration}</TableCell>
-                        <TableCell>{session.messages || "N/A"}</TableCell>
+                        <TableCell>{session.messages || 'N/A'}</TableCell>
                         <TableCell>{session.timestamp}</TableCell>
-                        <TableCell>{getChatStatusBadge(session.status)}</TableCell>
+                        <TableCell>
+                          {getChatStatusBadge(session.status)}
+                        </TableCell>
                         <TableCell>
                           <div className="flex items-center space-x-2">
                             <Button variant="ghost" size="sm">
@@ -557,8 +623,12 @@ export default function AdminControlPanel() {
                         <span className="font-medium">SMS Sessions</span>
                       </div>
                       <div className="text-right">
-                        <div className="text-2xl font-bold text-blue-600">1,234</div>
-                        <div className="text-sm text-muted-foreground">85% of total</div>
+                        <div className="text-2xl font-bold text-blue-600">
+                          1,234
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          85% of total
+                        </div>
                       </div>
                     </div>
                     <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
@@ -567,8 +637,12 @@ export default function AdminControlPanel() {
                         <span className="font-medium">Voice Sessions</span>
                       </div>
                       <div className="text-right">
-                        <div className="text-2xl font-bold text-green-600">222</div>
-                        <div className="text-sm text-muted-foreground">15% of total</div>
+                        <div className="text-2xl font-bold text-green-600">
+                          222
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          15% of total
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -587,23 +661,33 @@ export default function AdminControlPanel() {
                 <CardContent className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span>API Response Time</span>
-                    <Badge className="bg-green-100 text-green-800">Good (1.2s)</Badge>
+                    <Badge className="bg-green-100 text-green-800">
+                      Good (1.2s)
+                    </Badge>
                   </div>
                   <div className="flex items-center justify-between">
                     <span>Database Connection</span>
-                    <Badge className="bg-green-100 text-green-800">Healthy</Badge>
+                    <Badge className="bg-green-100 text-green-800">
+                      Healthy
+                    </Badge>
                   </div>
                   <div className="flex items-center justify-between">
                     <span>SMS Service</span>
-                    <Badge className="bg-green-100 text-green-800">Active</Badge>
+                    <Badge className="bg-green-100 text-green-800">
+                      Active
+                    </Badge>
                   </div>
                   <div className="flex items-center justify-between">
                     <span>Weather API</span>
-                    <Badge className="bg-yellow-100 text-yellow-800">Slow</Badge>
+                    <Badge className="bg-yellow-100 text-yellow-800">
+                      Slow
+                    </Badge>
                   </div>
                   <div className="flex items-center justify-between">
                     <span>Market Data Feed</span>
-                    <Badge className="bg-green-100 text-green-800">Active</Badge>
+                    <Badge className="bg-green-100 text-green-800">
+                      Active
+                    </Badge>
                   </div>
                 </CardContent>
               </Card>
@@ -613,23 +697,38 @@ export default function AdminControlPanel() {
                   <CardTitle>System Configuration</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <Button variant="outline" className="w-full justify-start bg-transparent">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start bg-transparent"
+                  >
                     <Settings className="w-4 h-4 mr-2" />
                     SMS Gateway Settings
                   </Button>
-                  <Button variant="outline" className="w-full justify-start bg-transparent">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start bg-transparent"
+                  >
                     <Settings className="w-4 h-4 mr-2" />
                     Weather API Configuration
                   </Button>
-                  <Button variant="outline" className="w-full justify-start bg-transparent">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start bg-transparent"
+                  >
                     <Settings className="w-4 h-4 mr-2" />
                     Trust Score Parameters
                   </Button>
-                  <Button variant="outline" className="w-full justify-start bg-transparent">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start bg-transparent"
+                  >
                     <Settings className="w-4 h-4 mr-2" />
                     Market Data Sources
                   </Button>
-                  <Button variant="outline" className="w-full justify-start bg-transparent">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start bg-transparent"
+                  >
                     <Settings className="w-4 h-4 mr-2" />
                     User Permissions
                   </Button>
@@ -640,5 +739,5 @@ export default function AdminControlPanel() {
         </Tabs>
       </div>
     </div>
-  )
+  );
 }

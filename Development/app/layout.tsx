@@ -13,7 +13,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'Krishi-Mudra | AI Financial Co-pilot for Farmers',
+  title: 'Nandi | AI Financial Co-pilot for Farmers',
   description:
     'Empowering Indian smallholder farmers with AI-powered financial guidance, weather insights, and market intelligence',
   generator: 'v0.app',

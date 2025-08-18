@@ -1,6 +1,6 @@
 # Smooth Page Transitions - Implementation Guide
 
-This document explains the smooth page transition system implemented in the Krishi-Mudra application.
+This document explains the smooth page transition system implemented in the Nandi application.
 
 ## Overview
 
