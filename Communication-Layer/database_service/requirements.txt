@@ -1,0 +1,3 @@
+# database_service/requirements.txt
+pymongo==4.0.1
+

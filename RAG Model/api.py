@@ -1,4 +1,3 @@
-# api.py
 # This is the main FastAPI application file.
 # It serves the RAG model as an API endpoint that accepts contextual information.
 
@@ -60,14 +59,17 @@ def construct_rich_prompt(request: QueryRequest) -> str:
     ctx = request.context
     prompt = (
         f"A farmer is asking for advice. Here is their situation:\n"
-        f"- Location: {ctx.location}\n"
     )
+    if ctx.location:
+        prompt += f"- Location: {ctx.location}\n"
     if ctx.soil_type:
         prompt += f"- Soil Type: {ctx.soil_type}\n"
     if ctx.current_crop:
         prompt += f"- Previous/Current Crop: {ctx.current_crop}\n"
     if ctx.weather_forecast:
         prompt += f"- Weather Forecast: {ctx.weather_forecast}\n"
+    if ctx.farm_size_acres:
+        prompt += f"- Farm Size: {ctx.farm_size_acres} acres\n"
     
     prompt += (
         f"\nBased on this context and verified ICAR research, answer the following question: "
@@ -111,4 +113,4 @@ if __name__ == "__main__":
     # To run this API:
     # 1. Make sure you have the vectorstore created (run rag_handler.py first)
     # 2. Run this command in your terminal: uvicorn api:app --reload
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8002)

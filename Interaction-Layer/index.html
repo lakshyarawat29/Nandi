@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-gray-900">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NANDI Live Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      .chat-bubble {
+        max-width: 75%;
+      }
+      .chat-bubble-user {
+        background-color: #4f46e5;
+        color: white;
+        align-self: flex-end;
+      }
+      .chat-bubble-agent {
+        background-color: #4b5563;
+        color: white;
+        align-self: flex-start;
+      }
+      .dot-flashing {
+        position: relative;
+        width: 10px;
+        height: 10px;
+        border-radius: 5px;
+        background-color: #9ca3af;
+        animation: dotFlashing 1s infinite linear alternate;
+        animation-delay: 0.5s;
+      }
+      .dot-flashing::before,
+      .dot-flashing::after {
+        content: "";
+        display: inline-block;
+        position: absolute;
+        top: 0;
+      }
+      .dot-flashing::before {
+        left: -15px;
+        width: 10px;
+        height: 10px;
+        border-radius: 5px;
+        background-color: #9ca3af;
+        animation: dotFlashing 1s infinite alternate;
+        animation-delay: 0s;
+      }
+      .dot-flashing::after {
+        left: 15px;
+        width: 10px;
+        height: 10px;
+        border-radius: 5px;
+        background-color: #9ca3af;
+        animation: dotFlashing 1s infinite alternate;
+        animation-delay: 1s;
+      }
+      @keyframes dotFlashing {
+        0% {
+          background-color: #9ca3af;
+        }
+        50%,
+        100% {
+          background-color: #6b7280;
+        }
+      }
+    </style>
+  </head>
+  <body
+    class="h-full flex items-center justify-center p-4 bg-gray-900 text-white"
+  >
+    <div
+      class="w-full max-w-2xl h-[90vh] bg-gray-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-700"
+    >
+      <div
+        class="p-4 border-b border-gray-700 flex justify-between items-center"
+      >
+        <div>
+          <h1 class="text-xl font-bold text-indigo-400">NANDI Live Chat</h1>
+          <p id="connection-status" class="text-sm text-red-400">
+            Disconnected
+          </p>
+        </div>
+        <div class="w-1/2">
+          <select
+            id="farmer-select"
+            class="w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:ring-indigo-500 focus:border-indigo-500"
+          >
+            <option value="+919876543210">Rohan Deshmukh (Marathi)</option>
+            <option value="+919988776655">Suresh Patel (Hindi)</option>
+            <option value="+917766554433">Karthik Rajan (Tamil)</option>
+          </select>
+        </div>
+      </div>
+
+      <div
+        id="chat-window"
+        class="flex-1 flex flex-col gap-4 p-4 overflow-y-auto bg-gray-900"
+      >
+        <!-- Chat messages will be appended here -->
+      </div>
+
+      <div
+        id="typing-indicator-container"
+        class="h-8 p-2 text-sm text-gray-400 flex items-center"
+      ></div>
+
+      <div class="p-4 border-t border-gray-700 flex items-center gap-3">
+        <input
+          type="text"
+          id="chat-input"
+          class="flex-1 bg-gray-700 border border-gray-600 rounded-lg p-3 focus:ring-indigo-500 focus:border-indigo-500"
+          placeholder="Type your message..."
+          disabled
+        />
+        <button
+          id="send-btn"
+          class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold p-3 rounded-lg transition-colors disabled:opacity-50"
+          disabled
+        >
+          <i class="fas fa-paper-plane"></i>
+        </button>
+        <button
+          id="record-btn"
+          class="bg-red-600 hover:bg-red-700 text-white font-bold p-3 rounded-lg transition-colors disabled:opacity-50"
+          disabled
+        >
+          <i class="fas fa-microphone"></i>
+        </button>
+      </div>
+    </div>
+
+    <script>
+      const farmerSelect = document.getElementById("farmer-select");
+      const connectionStatus = document.getElementById("connection-status");
+      const chatWindow = document.getElementById("chat-window");
+      const chatInput = document.getElementById("chat-input");
+      const sendBtn = document.getElementById("send-btn");
+      const recordBtn = document.getElementById("record-btn");
+      const typingIndicatorContainer = document.getElementById(
+        "typing-indicator-container"
+      );
+
+      const WEBSOCKET_BASE_URL = "ws://localhost:8000";
+      let chatSocket;
+
+      function connect() {
+        if (chatSocket && chatSocket.readyState === WebSocket.OPEN) {
+          chatSocket.close();
+        }
+
+        const phoneNumber = farmerSelect.value.replace("+", "");
+        connectionStatus.textContent = "Connecting...";
+        connectionStatus.className = "text-sm text-yellow-400";
+
+        chatSocket = new WebSocket(
+          `${WEBSOCKET_BASE_URL}/ws/chat/${phoneNumber}`
+        );
+
+        chatSocket.onopen = () => {
+          connectionStatus.textContent = `Connected as ${
+            farmerSelect.options[farmerSelect.selectedIndex].text
+          }`;
+          connectionStatus.className = "text-sm text-green-400";
+          chatInput.disabled = false;
+          sendBtn.disabled = false;
+          recordBtn.disabled = false;
+        };
+
+        chatSocket.onmessage = (event) => {
+          showTypingIndicator(false);
+          const data = JSON.parse(event.data);
+          appendMessage(data.sender, data.message);
+        };
+
+        chatSocket.onclose = () => {
+          connectionStatus.textContent = "Disconnected";
+          connectionStatus.className = "text-sm text-red-400";
+          chatInput.disabled = true;
+          sendBtn.disabled = true;
+          recordBtn.disabled = true;
+          showTypingIndicator(false);
+        };
+
+        chatSocket.onerror = (error) => {
+          connectionStatus.textContent = "Connection Error";
+          console.error("WebSocket Error:", error);
+        };
+      }
+
+      function appendMessage(sender, message) {
+        const bubble = document.createElement("div");
+        const bubbleType =
+          sender === "user" ? "chat-bubble-user" : "chat-bubble-agent";
+        bubble.className = `p-3 rounded-lg chat-bubble ${bubbleType}`;
+        bubble.textContent = message;
+        chatWindow.appendChild(bubble);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+      }
+
+      function showTypingIndicator(show = true) {
+        if (show) {
+          typingIndicatorContainer.innerHTML = `<div class="p-3 rounded-lg chat-bubble chat-bubble-agent flex items-center"><div class="dot-flashing"></div></div>`;
+        } else {
+          typingIndicatorContainer.innerHTML = "";
+        }
+      }
+
+      function sendTextMessage() {
+        const message = chatInput.value.trim();
+        if (message && chatSocket && chatSocket.readyState === WebSocket.OPEN) {
+          appendMessage("user", message);
+          chatSocket.send(JSON.stringify({ type: "text", message: message }));
+          chatInput.value = "";
+          showTypingIndicator(true);
+        }
+      }
+
+      function sendVoiceMessage() {
+        // In a real app, you'd record audio here. We'll simulate it.
+        const message = "[Simulated Voice Message]";
+        appendMessage("user", message);
+        chatSocket.send(
+          JSON.stringify({ type: "audio", url: "simulated_audio.wav" })
+        );
+        showTypingIndicator(true);
+      }
+
+      sendBtn.addEventListener("click", sendTextMessage);
+      chatInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") sendTextMessage();
+      });
+      recordBtn.addEventListener("click", sendVoiceMessage);
+      farmerSelect.addEventListener("change", connect);
+
+      // Initial connection
+      connect();
+    </script>
+  </body>
+</html>

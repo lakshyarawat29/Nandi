@@ -1,0 +1,10 @@
+fastapi==0.78.0
+uvicorn==0.17.6
+pydantic==1.9.1
+# For AI Models
+torch
+transformers==4.21.1
+sentencepiece==0.1.97
+# For Whisper STT
+datasets==2.4.0
+librosa==0.9.2

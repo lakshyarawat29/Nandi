@@ -120,7 +120,7 @@ def setup_qa_chain():
     retriever = db.as_retriever(search_kwargs={'k': 3})
     
     print("Initializing local LLM with Ollama...")
-    llm = Ollama(model="llama3.1:8b") # Ensure you have pulled this model
+    llm = Ollama(model="llama3.1:4b") # Ensure you have pulled this model
     
     qa_chain = RetrievalQA.from_chain_type(llm=llm, chain_type='stuff', retriever=retriever, return_source_documents=True)
     print("QA chain is ready.")

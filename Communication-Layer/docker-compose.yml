@@ -1,0 +1,83 @@
+# UPDATED to include the new webrtc_service for live calls.
+
+version: "3.8"
+
+services:
+  database:
+    image: mongo:5.0
+    container_name: nandi_mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - nandi_network
+
+  db_seeder:
+    build:
+      context: ./database_service
+    container_name: nandi_db_seeder
+    depends_on:
+      - database
+    environment:
+      - MONGO_URI=mongodb://database:27017/
+    networks:
+      - nandi_network
+
+  stt_tts_service:
+    build:
+      context: ./stt_tts_service
+    container_name: nandi_stt_tts
+    ports:
+      - "8002:8002"
+    networks:
+      - nandi_network
+    restart: on-failure
+
+  agentic_core:
+    build:
+      context: ./agentic_core
+    container_name: nandi_agentic_core
+    ports:
+      - "8001:8001"
+    networks:
+      - nandi_network
+    restart: on-failure
+
+  # --- NEW SERVICE ---
+  webrtc_service:
+    build:
+      context: ./webrtc_service
+    container_name: nandi_webrtc
+    ports:
+      - "8080:8080"
+    networks:
+      - nandi_network
+    restart: on-failure
+
+  comm_service:
+    build:
+      context: ./comm_service
+    container_name: nandi_comm_service
+    ports:
+      - "8000:8000"
+    depends_on:
+      - database
+      - stt_tts_service
+      - agentic_core
+      - webrtc_service # Added dependency
+    environment:
+      - DATABASE_URL=mongodb://database:27017/
+      - STT_TTS_SERVICE_URL=http://stt_tts_service:8002
+      - AGENTIC_CORE_WEBSOCKET_URL=ws://agentic_core:8001/ws
+      - WEBRTC_SERVICE_URL=http://webrtc_service:8080 # Added env var
+    networks:
+      - nandi_network
+    restart: on-failure
+
+networks:
+  nandi_network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
